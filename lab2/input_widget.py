@@ -56,6 +56,8 @@ class InputWidget(QLineEdit):
     def text_changed(self):
         if self.__type in (InputWidget.Base, InputWidget.Int, InputWidget.Function):
             return
+        cursor_pos = self.cursorPosition()
+        txt = self.text()
         modified_text = list()
         if self.__type == InputWidget.Natural:
             self.natural_filter(self.text(), modified_text)
@@ -68,7 +70,9 @@ class InputWidget(QLineEdit):
                 modified_text.insert(0, '-')
             else:
                 self.positive_float_filter(text, modified_text)
-        self.setText(''.join(modified_text))
+        modified_text_str = ''.join(modified_text)
+        self.setText(modified_text_str)
+        self.setCursorPosition(cursor_pos - len(txt) + len(modified_text_str))
 
     @staticmethod
     def natural_filter(text, output):
