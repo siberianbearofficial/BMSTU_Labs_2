@@ -8,6 +8,13 @@ def decode_pixel(p):
         yield p[i] & 1
 
 
+def decode_str(s):
+    try:
+        return s.decode('utf-8')
+    except UnicodeDecodeError:
+        raise ValueError('Не удалось расшифровать это изображение')
+
+
 def decode(pxs, size):
     s = bytearray([0])
     k = 0
@@ -18,21 +25,14 @@ def decode(pxs, size):
                     s[-1] = s[-1] << 1 | p
                 elif not s[-1]:
                     s.pop()
-                    try:
-                        return s.decode('utf-8')
-                    except UnicodeDecodeError:
-                        return ''
+                    return decode_str(s)
                 else:
                     s.append(0)
                 k += 1
-    try:
-        return s.decode('utf-8')
-    except UnicodeDecodeError:
-        return ''
+    return decode_str(s)
 
 
 def encode(pxs, size, s):
-
     if len(s) + 1 >= (size[0] * size[1]) // 3:
         raise ValueError('Слишком длинная строка. '
                          'Используйте другую или выберите изображение с более высоким разрешением.')

@@ -1,5 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLineEdit, QPushButton, QFileDialog
 
+from os.path import basename
+
 
 class ImagePathInputWidget(QWidget):
     SAVE_MODE = 0
@@ -27,17 +29,27 @@ class ImagePathInputWidget(QWidget):
         self.layout.addWidget(self.select_button)
 
     def clicked(self):
-        match self.mode:
+        path = ImagePathInputWidget.get_file_name(self.mode)
+        if path:
+            path = ImagePathInputWidget.ensure_bmp(path)
+            self.image_path.setText(basename(path))
+            self.on_selected(path)
+
+    @staticmethod
+    def get_file_name(mode):
+        match mode:
             case ImagePathInputWidget.SAVE_MODE:
                 path = QFileDialog.getSaveFileName(filter='Images (*.bmp)')
             case ImagePathInputWidget.OPEN_MODE:
                 path = QFileDialog.getOpenFileName(filter='Images (*.bmp)')
             case _:
-                raise ValueError(f'Mode {self.mode} is not supported')
+                raise ValueError(f'Mode {mode} is not supported')
         if path and path[0]:
-            if not path[0].endswith('.bmp'):
-                self.image_path.setText(path[0] + '.bmp')
-                self.on_selected(path[0] + '.bmp')
-            else:
-                self.image_path.setText(path[0])
-                self.on_selected(path[0])
+            return path[0]
+        return None
+
+    @staticmethod
+    def ensure_bmp(path):
+        if not path.endswith('.bmp'):
+            return path + '.bmp'
+        return path

@@ -16,22 +16,27 @@ class EncodeWidget(QWidget):
         self.error_stream = error_stream
         self.success_stream = success_stream
 
+        # Layout
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignTop)
 
+        # Input image
         self.layout.addWidget(QLabel('Выберите изображение для зашифровки'))
         self.image_input = ImagePathInputWidget(ImagePathInputWidget.OPEN_MODE, self.set_input_image_path)
         self.layout.addWidget(self.image_input)
 
+        # Encode string
         self.layout.addWidget(QLabel('Строка для зашифровки'))
         self.encode_string = QLineEdit()
         self.layout.addWidget(self.encode_string)
 
+        # Output image
         self.layout.addWidget(QLabel('Выберите, куда сохранить зашифрованное изображение'))
         self.image_output = ImagePathInputWidget(ImagePathInputWidget.SAVE_MODE, self.set_output_image_path)
         self.layout.addWidget(self.image_output)
 
+        # Encode button
         self.encode_button = QPushButton('Зашифровать')
         self.encode_button.clicked.connect(self.encode)
         self.layout.addWidget(self.encode_button)
@@ -43,8 +48,10 @@ class EncodeWidget(QWidget):
                 enc.encode(img.load(), img.size, self.encode_string.text())
                 img.save(self.output_image_path)
                 self.success_stream('Изображение успешно зашифровано')
-            except Exception as e:
+            except ValueError as e:
                 self.error_stream(str(e))
+            except Exception as e:
+                self.error_stream(f'Неизвестная ошибка: {e}')
         else:
             self.error_stream('Невозможно выполнить шифрование')
 
@@ -65,19 +72,23 @@ class DecodeWidget(QWidget):
         self.error_stream = error_stream
         self.success_stream = success_stream
 
+        # Layout
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.layout.setAlignment(Qt.AlignTop)
 
+        # Input image
         self.layout.addWidget(QLabel('Выберите изображение для расшифровки'))
         self.image_input = ImagePathInputWidget(ImagePathInputWidget.OPEN_MODE, self.set_image_path)
         self.layout.addWidget(self.image_input)
 
+        # Decode result
         self.layout.addWidget(QLabel('Результат расшифровки'))
         self.decode_result = QLineEdit()
         self.decode_result.setReadOnly(True)
         self.layout.addWidget(self.decode_result)
 
+        # Decode button
         self.decode_button = QPushButton('Расшифровать')
         self.decode_button.clicked.connect(self.decode)
         self.layout.addWidget(self.decode_button)
@@ -91,10 +102,14 @@ class DecodeWidget(QWidget):
             try:
                 img = Image.open(self.image_path)
                 res = enc.decode(img.load(), img.size)
+                # print(res, file=open('out.txt', 'w', encoding='utf-8'))    # FILE
                 self.decode_result.setText(res)
                 self.success_stream('Изображение успешно расшифровано')
+            except ValueError as e:
+                self.decode_result.setText('')
+                self.error_stream(str(e))
             except Exception as e:
                 self.decode_result.setText('')
-                self.error_stream(f'Ошибка: {e}')
+                self.error_stream(f'Неизвестная ошибка: {e}')
         else:
             self.error_stream('Невозможно выполнить расшифровку')

@@ -10,31 +10,35 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        # Window properties
         self.setWindowTitle("Стеганография")
         self.setMinimumSize(350, 300)
         self.move(600, 250)
 
-        self.mode = 0
-
+        # Central widget
         self.central_widget = QWidget()
+        self.setCentralWidget(self.central_widget)
 
+        # Layout
         self.layout = QVBoxLayout(self.central_widget)
         self.layout.setSpacing(10)
         self.layout.setAlignment(Qt.AlignTop)
 
+        # Mode
+        self.mode = 0
         self.layout.addWidget(QLabel('Режим работы'))
         self.mode_combo_box = QComboBox(self.central_widget)
         self.mode_combo_box.addItems(('Шифрование', 'Расшифровка'))
         self.mode_combo_box.currentIndexChanged.connect(self.set_mode)
         self.layout.addWidget(self.mode_combo_box)
 
+        # Encode / Decode widgets
         self.encode_widget = EncodeWidget(self.show_info, self.show_error)
         self.decode_widget = DecodeWidget(self.show_info, self.show_error)
-
         self.layout.addWidget(self.encode_widget)
         self.layout.addWidget(self.decode_widget)
 
-        self.setCentralWidget(self.central_widget)
+        # Update
         self.update_layout()
 
     def set_mode(self, mode):
