@@ -15,7 +15,7 @@ class InputWidget(QLineEdit):
         else:
             super().__init__()
 
-        self.finished = None
+        self._finished = None
 
         font = self.font()
         font.setPointSize(16)
@@ -29,29 +29,39 @@ class InputWidget(QLineEdit):
 
     def connect(self, func):
         if func:
-            self.finished = func
+            self._finished = func
             self.editing_finished()
         return self
 
     def editing_finished(self):
-        if not self.finished:
+        if not self._finished:
             return
         if self.__type in (InputWidget.Int, InputWidget.Natural):
             try:
                 x = int(self.text())
             except:
-                self.finished('Error')
+                self._finished('Error')
             else:
-                self.finished(x)
+                self._finished(x)
         elif self.__type in (InputWidget.Float, InputWidget.PositiveFloat):
             try:
                 x = float(self.text())
             except:
-                self.finished('Error')
+                self._finished('Error')
             else:
-                self.finished(x)
+                self._finished(x)
         else:
-            self.finished(self.text())
+            self._finished(self.text())
+
+    def get(self):
+        match self.__type:
+            case InputWidget.Int | InputWidget.Natural:
+                content = int(self.text())
+            case InputWidget.Float | InputWidget.PositiveFloat:
+                content = float(self.text())
+            case _:
+                content = None
+        return content
 
     def text_changed(self):
         if self.__type in (InputWidget.Base, InputWidget.Int, InputWidget.Function):
