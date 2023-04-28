@@ -1,4 +1,5 @@
 from PyQt5.QtCore import QThread, pyqtSignal
+from time import sleep
 
 
 class Looper(QThread):
@@ -12,3 +13,4 @@ class Looper(QThread):
         if self.func:
             for obj in self.func():
                 self.step.emit(obj)
+                sleep(0.1)

@@ -45,15 +45,15 @@ class MainWindow(QMainWindow):
         button_clear = QPushButton('Очистить')
         button_clear.clicked.connect(self.om.clear)
 
-        button_calc = QPushButton('Треугольник')
-        button_calc.clicked.connect(self.clicked_calc)
+        self.button_calc = QPushButton('Треугольник')
+        self.button_calc.clicked.connect(self.clicked_calc)
 
         self.inspector = Inspector(lambda item: self.om.select(item.id) if item else None, self.om.remove,
                                    lambda: self.om.edit(self.edit_window(list(self.om.get(selected=True))[0][0])))
 
         left_layout.addWidget(button1)
         left_layout.addWidget(button2)
-        left_layout.addWidget(button_calc)
+        left_layout.addWidget(self.button_calc)
         left_layout.addWidget(button_clear)
         left_layout.addWidget(self.inspector)
 
@@ -78,6 +78,7 @@ class MainWindow(QMainWindow):
         self.draw_mode = draw_mode
 
     def clicked_calc(self):
+        self.button_calc.setDisabled(True)
         self.can_make_triangles = False
         p_set_1 = list(self.om.group(P_SET_1))
         p_set_2 = list(self.om.group(P_SET_2))
@@ -91,6 +92,7 @@ class MainWindow(QMainWindow):
         self.can_make_triangles = True
 
     def drawing_triangles_finished(self):
+        self.button_calc.setDisabled(False)
         if not self.can_make_triangles:
             self.show_error('Невозможно построить требуемый треугольник')
 
