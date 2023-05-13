@@ -13,4 +13,4 @@ class Looper(QThread):
         if self.func:
             for obj in self.func():
                 self.step.emit(obj)
-                sleep(0.1)
+                sleep(0.05)

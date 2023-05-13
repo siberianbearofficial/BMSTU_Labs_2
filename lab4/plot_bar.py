@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout
 
 from plot import Plot
-from color import BG_COLOR
+from color import *
 
 
 class PlotBar(QWidget):
@@ -9,10 +9,15 @@ class PlotBar(QWidget):
         super().__init__(parent)
 
         layout = QVBoxLayout(self)
-        layout.setSpacing(0)
         layout.setContentsMargins(0, 0, 0, 0)
 
-        self.plot = Plot(get_objects, colors, new_object)
-        layout.addWidget(self.plot)
+        central_widget = QWidget()
+        central_widget_layout = QVBoxLayout(central_widget)
+        central_widget_layout.setContentsMargins(0, 0, 0, 0)
 
-        self.setStyleSheet(f'background-color: {BG_COLOR}; border-radius: 10px;')
+        self.plot = Plot(get_objects, colors, new_object)
+
+        central_widget_layout.addWidget(self.plot)
+        layout.addWidget(central_widget)
+
+        self.setStyleSheet(f'background-color: {PLOT_BG_COLOR}; border-radius: 10px;')

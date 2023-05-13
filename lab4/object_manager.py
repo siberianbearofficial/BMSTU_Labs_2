@@ -6,7 +6,7 @@ class ObjectManager:
 
     def add(self, obj: tuple | list):
         self._objects.append(obj)
-        self.update()
+        self.select(id(obj[0]))
 
     def get(self, _id=None, selected=None, every=None):
         if selected:
@@ -18,10 +18,11 @@ class ObjectManager:
                 if every or not self.is_selected(obj):
                     yield obj, group
 
-    def edit(self, struct):
-        obj = self._get_by_id(self.selected)[0]
+    def edit(self, struct, obj=None):
+        if obj is None:
+            obj = self._get_by_id(self.selected)[0]
         for field, val in struct:
-            obj.__dict__[field] = val
+            obj.__dict__[field] = val if val is not None else 0
         self.update()
 
     def is_selected(self, obj):
@@ -66,8 +67,14 @@ class ObjectManager:
         self._update_funcs = funcs
         return self
 
-    def clear(self):
-        self._objects.clear()
+    def clear(self, group=None):
+        if group is None:
+            self._objects.clear()
+        else:
+            for obj, gr in self._objects:
+                if gr == group:
+                    self._objects.remove((obj, gr))
+
         self.update()
 
     def update(self):

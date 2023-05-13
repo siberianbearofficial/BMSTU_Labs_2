@@ -5,7 +5,7 @@ class Point:
 
     def __add__(self, other):
         if isinstance(other, Vector):
-            return Vector(self.x + other.x, self.y + other.y)
+            return Point(self.x + other.x, self.y + other.y)
         else:
             raise NotImplementedError
 

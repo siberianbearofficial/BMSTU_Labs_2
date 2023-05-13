@@ -47,7 +47,7 @@ class Plot(QWidget):
     def draw(self, obj, color=BLACK_COLOR):
         self.set_pen(color, THICKNESS)
         brush = self.painter.brush()
-        self.painter.setBrush(BG_COLOR)
+        self.painter.setBrush(PLOT_BG_COLOR)
 
         if isinstance(obj, ag.Point):
             self.painter.drawEllipse(int(self.ag_x_to_plot_x(obj.x) - RADIUS),

@@ -39,8 +39,13 @@ class Color(QColor):
         return Color(red, green, blue)
 
 
-BG_COLOR = Color(255, 255, 255)
-BLACK_COLOR = Color(0, 0, 0)
-RED_COLOR = Color(255, 0, 0)
-BLUE_COLOR = Color(0, 0, 255)
-SELECTED_COLOR = Color(130, 80, 190)
+BG_COLOR = Color('#2C3639')
+BLACK_COLOR = Color('#2C3639')
+RED_COLOR = Color('#dd3333')
+BLUE_COLOR = Color('#4876F2')
+SELECTED_COLOR = Color('#50B837')
+WHITE_COLOR = Color('#FFFFFF')
+WIDGET_BG_COLOR = Color('#DCD7C9')
+ACCENT_COLOR = Color('#A27B5C')
+DARK_COLOR = Color('#3F4E4F')
+PLOT_BG_COLOR = Color('#FFFFFF')

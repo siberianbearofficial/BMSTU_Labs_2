@@ -9,7 +9,7 @@ class InputWidget(QLineEdit):
     PositiveFloat = 21
     Function = 30
 
-    def __init__(self, parent=None, __type=Base, default=''):
+    def __init__(self, parent=None, __type=Base, default: str = ''):
         if parent:
             super().__init__(parent)
         else:
@@ -56,9 +56,9 @@ class InputWidget(QLineEdit):
     def get(self):
         match self.__type:
             case InputWidget.Int | InputWidget.Natural:
-                content = int(self.text())
+                content = int(self.text()) if self.text() else None
             case InputWidget.Float | InputWidget.PositiveFloat:
-                content = float(self.text())
+                content = float(self.text()) if self.text() else None
             case _:
                 content = None
         return content

@@ -8,13 +8,15 @@
 from angem import Triangle
 
 
-def find_triangle(ps1, ps2):
+def find_triangle(ps1, ps2, only_first=False):
     for i1 in range(len(ps1) - 2):
         for i2 in range(i1 + 1, len(ps1) - 1):
             for i3 in range(i2 + 1, len(ps1)):
                 triangle = Triangle(ps1[i1], ps1[i2], ps1[i3])
                 if check_triangle(triangle, ps1, ps2):
                     yield triangle
+                    if only_first:
+                        return
 
 
 def check_triangle(triangle, ps1, ps2):

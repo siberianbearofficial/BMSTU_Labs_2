@@ -1,13 +1,18 @@
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QListWidget, QListWidgetItem
+
+from styles import LIST_STYLE
 
 
 class Inspector(QListWidget):
     def __init__(self, select_func=None, remove_func=None, edit_func=None):
         super().__init__()
+
+        self.setStyleSheet(LIST_STYLE)
+
         if select_func:
             self.currentItemChanged.connect(select_func)
+            self.doubleClicked.connect(edit_func)
         self._remove_func = remove_func
         self._edit_func = edit_func
 
